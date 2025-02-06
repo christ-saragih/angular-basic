@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="card shadow" style="border: none">
+    <div
+      class="card-header bg-primary-subtle d-flex align-items-center justify-content-between"
+      style="border: none"
+    >
+      <h3 class="card-title p-2 mb-0">Edit Todo</h3>
+      <button class="btn btn-secondary" (click)="onCancel()">
+        Back to List
+      </button>
+    </div>
+
+    <div class="card-body">
+      @if(isLoading) {
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      } @else {
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <!-- Title Input -->
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            id="title"
+            class="form-control"
+            formControlName="title"
+            [ngClass]="{
+              'is-invalid': ef['title'].errors && ef['title'].touched
+            }"
+          />
+          @if(ef['title'].errors && ef['title'].touched) {
+          <div class="invalid-feedback">
+            @if(ef['title'].errors['required']) {
+            <div>Title is required</div>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Category Select -->
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <ng-select
+            id="category"
+            formControlName="category_id"
+            [items]="categories"
+            bindLabel="name"
+            bindValue="id"
+            [clearable]="false"
+            [ngClass]="{
+              'is-invalid':
+                ef['category_id'].errors && ef['category_id'].touched
+            }"
+          >
+          </ng-select>
+          @if(ef['category_id'].errors && ef['category_id'].touched) {
+          <div class="invalid-feedback">
+            @if(ef['category_id'].errors['required']) {
+            <div>Category is required</div>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Description Textarea -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            id="description"
+            class="form-control"
+            rows="3"
+            formControlName="description"
+          ></textarea>
+        </div>
+
+        <!-- Progress Input -->
+        <div class="mb-3">
+          <label for="progress" class="form-label">Progress (%)</label>
+          <input
+            type="range"
+            class="form-range"
+            id="progress"
+            min="0"
+            max="100"
+            step="10"
+            formControlName="progress"
+          />
+          <div class="text-center">{{ editForm.get("progress")?.value }}%</div>
+        </div>
+
+        <div class="d-flex gap-2 justify-content-end">
+          <button type="button" class="btn btn-secondary" (click)="onCancel()">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-warning"
+            [disabled]="editForm.invalid"
+          >
+            Update Todo
+          </button>
+        </div>
+      </form>
+      }
+    </div>
+  </div>
+</div>

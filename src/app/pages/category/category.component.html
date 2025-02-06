@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="card shadow" style="border: none">
+    <div class="card-header bg-primary-subtle" style="border: none">
+      <h3 class="card-title p-2 mb-0">Todo Category List</h3>
+    </div>
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let todoCategory of todoCategories; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ todoCategory.name }}</td>
+            <td>
+              <button
+                class="btn btn-sm btn-warning me-2"
+                (click)="onUpdate(todoCategory)"
+              >
+                <i class="bi bi-pencil"></i> Update
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="onDelete(todoCategory)"
+              >
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

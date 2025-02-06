@@ -1,0 +1,228 @@
+<div class="container">
+  <div class="card shadow" style="border: none">
+    <div
+      class="card-header bg-primary-subtle d-flex align-items-center justify-content-between"
+      style="border: none"
+    >
+      <h3 class="card-title p-2 mb-0">Todo List</h3>
+      <button class="btn btn-success" (click)="openModal(addTodo)">
+        Add Todo
+      </button>
+
+      <ng-template #addTodo let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Add Todo</h4>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          ></button>
+        </div>
+
+        <form [formGroup]="addForm" (ngSubmit)="onSubmit()" autocomplete="off">
+          <div class="modal-body">
+            <!-- Title Input -->
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input
+                type="text"
+                id="title"
+                class="form-control"
+                name="title"
+                required
+                placeholder="Enter todo title"
+                formControlName="title"
+                [ngClass]="{ 'is-invalid': af['title'].errors }"
+              />
+              @if(af['title'].errors) {
+              <div class="invalid-feedback" align="left">
+                @if(af["title"].errors['required']) {
+                <div>Title is required</div>
+                }
+              </div>
+              }
+            </div>
+
+            <!-- Category Select -->
+            <div class="mb-3">
+              <label for="category" class="form-label">Category</label>
+              <ng-select
+                id="category"
+                name="category"
+                formControlName="category_id"
+                [items]="categories"
+                bindLabel="name"
+                bindValue="id"
+                placeholder="Select category"
+                [clearable]="false"
+                required
+                [ngClass]="{
+                  'is-invalid':
+                    af['category_id'].errors && af['category_id'].touched
+                }"
+              >
+              </ng-select>
+              <!-- Error Handling -->
+              <div
+                *ngIf="af['category_id'].errors && af['category_id'].touched"
+                class="invalid-feedback"
+                align="left"
+              >
+                <div *ngIf="af['category_id'].errors['required']">
+                  Category is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Description Textarea -->
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea
+                id="description"
+                class="form-control"
+                rows="3"
+                name="description"
+                placeholder="Enter description"
+                formControlName="description"
+                [ngClass]="{ 'is-invalid': af['description'].errors }"
+              >
+              </textarea>
+              @if(af['description'].errors) {
+              <div class="invalid-feedback" align="left">
+                @if(af["description"].errors['required']) {
+                <div>Description is required</div>
+                }
+              </div>
+              }
+            </div>
+
+            <!-- Progress Input (Range) -->
+            <div class="mb-3">
+              <label for="progress" class="form-label">Progress (%)</label>
+              <input
+                type="range"
+                class="form-range"
+                id="progress"
+                name="progress"
+                min="0"
+                max="100"
+                step="10"
+                formControlName="progress"
+                [ngClass]="{ 'is-invalid': af['progress'].errors }"
+              />
+              @if(af['progress'].errors) {
+              <div class="invalid-feedback" align="left">
+                @if(af["progress"].errors['required']) {
+                <div>Progress is required</div>
+                }
+              </div>
+              }
+            </div>
+           
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="modal.dismiss()"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-success">Save Todo</button>
+          </div>
+        </form>
+      </ng-template>
+    </div>
+
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Category</th>
+            <th scope="col">Description</th>
+            <th scope="col">Progress</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let todo of todos; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ todo.title }}</td>
+            <td>{{ todo.category.name }}</td>
+            <td>{{ todo.description }}</td>
+            <td class="text-center">
+              <div class="progress mt-2">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  [style.width]="todo.progress + '%'"
+                  [attr.aria-valuenow]="todo.progress"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  {{ todo.progress }}%
+                </div>
+              </div>
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-warning me-2"
+                (click)="onUpdate(todo)"
+              >
+                <i class="bi bi-pencil"></i> Update
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="openDeleteModal(deleteTodo, todo)"
+              >
+                <i class="bi bi-trash"></i> Delete
+              </button>
+              <ng-template #deleteTodo let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title">Delete Todo</h4>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    (click)="modal.dismiss('Cross click')"
+                  ></button>
+                </div>
+
+                <div class="modal-body">
+                  <p>
+                    Are you sure you want to delete the todo "<strong>{{
+                      selectedTodo?.title
+                    }}</strong
+                    >"?
+                  </p>
+                  <p class="text-muted">This action cannot be undone.</p>
+                </div>
+
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="modal.dismiss()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="onDelete()"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
