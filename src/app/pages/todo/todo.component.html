@@ -100,17 +100,21 @@
             <!-- Progress Input (Range) -->
             <div class="mb-3">
               <label for="progress" class="form-label">Progress (%)</label>
-              <input
-                type="range"
-                class="form-range"
-                id="progress"
-                name="progress"
-                min="0"
-                max="100"
-                step="10"
-                formControlName="progress"
-                [ngClass]="{ 'is-invalid': af['progress'].errors }"
-              />
+              <div class="d-flex align-items-center">
+                <input
+                  type="range"
+                  class="w-100"
+                  id="progress"
+                  name="progress"
+                  min="0"
+                  max="100"
+                  step="1"
+                  formControlName="progress"
+                  [ngClass]="{ 'is-invalid': af['progress'].errors }"
+                  (input)="updateProgressValue($event)"
+                />
+                <span class="ms-2 text-primary fw-semibold">{{ progressValue }}%</span>
+              </div>
               @if(af['progress'].errors) {
               <div class="invalid-feedback" align="left">
                 @if(af["progress"].errors['required']) {
@@ -119,7 +123,6 @@
               </div>
               }
             </div>
-           
           </div>
 
           <div class="modal-footer">

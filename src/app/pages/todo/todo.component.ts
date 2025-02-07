@@ -32,6 +32,8 @@ export class TodoComponent implements OnInit {
   todos: Todo[] = [];
   categories: TodoCategory[] = [];
 
+  progressValue: number = 0;
+
   constructor(
     private restApiService: TodoService,
     private modalService: NgbModal,
@@ -138,5 +140,10 @@ export class TodoComponent implements OnInit {
         // Here you could add error handling, like showing a toast notification
       },
     });
+  }
+
+  updateProgressValue(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    this.progressValue = parseInt(inputElement.value, 10);
   }
 }
