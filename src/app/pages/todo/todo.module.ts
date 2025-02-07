@@ -6,6 +6,8 @@ import {
   NgOptionTemplateDirective,
   NgSelectComponent,
 } from '@ng-select/ng-select';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatIconModule} from '@angular/material/icon';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TodoComponent } from './todo.component';
@@ -20,6 +22,8 @@ import { EditComponent } from './edit/edit.component';
     NgLabelTemplateDirective,
     NgOptionTemplateDirective,
     NgSelectComponent,
+    NgbTooltipModule,
+    MatIconModule
   ],
   exports: [TodoComponent],
 })

@@ -113,7 +113,9 @@
                   [ngClass]="{ 'is-invalid': af['progress'].errors }"
                   (input)="updateProgressValue($event)"
                 />
-                <span class="ms-2 text-primary fw-semibold">{{ progressValue }}%</span>
+                <span class="ms-2 text-primary fw-semibold"
+                  >{{ progressValue }}%</span
+                >
               </div>
               @if(af['progress'].errors) {
               <div class="invalid-feedback" align="left">
@@ -171,18 +173,22 @@
                 </div>
               </div>
             </td>
-            <td>
+            <td class="d-flex gap-2">
               <button
-                class="btn btn-sm btn-warning me-2"
+                class="btn btn-sm btn-warning d-flex"
                 (click)="onUpdate(todo)"
+                placement="top"
+                ngbTooltip="Update"
               >
-                <i class="bi bi-pencil"></i> Update
+                <mat-icon fontIcon="edit_note"></mat-icon>
               </button>
               <button
-                class="btn btn-sm btn-danger"
+                class="btn btn-sm btn-danger d-flex"
                 (click)="openDeleteModal(deleteTodo, todo)"
+                placement="top"
+                ngbTooltip="Delete"
               >
-                <i class="bi bi-trash"></i> Delete
+                <mat-icon fontIcon="delete_outline"></mat-icon>
               </button>
               <ng-template #deleteTodo let-modal>
                 <div class="modal-header">
