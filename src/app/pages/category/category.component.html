@@ -1,7 +1,61 @@
 <div class="container">
   <div class="card shadow" style="border: none">
-    <div class="card-header bg-primary-subtle" style="border: none">
+    <div
+      class="card-header bg-primary-subtle d-flex align-items-center justify-content-between"
+      style="border: none"
+    >
       <h3 class="card-title p-2 mb-0">Todo Category List</h3>
+      <button class="btn btn-success" (click)="openModal(addCategory)">
+        Add Category
+      </button>
+
+      <ng-template #addCategory let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Add Category</h4>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          ></button>
+        </div>
+
+        <form [formGroup]="addForm" (ngSubmit)="onSubmit()" autocomplete="off">
+          <div class="modal-body">
+            <!-- Category Name Input -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Category Name</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                name="name"
+                required
+                placeholder="Enter category name"
+                formControlName="name"
+                [ngClass]="{ 'is-invalid': af['name'].errors }"
+              />
+              @if(af['name'].errors) {
+              <div class="invalid-feedback" align="left">
+                @if(af["name"].errors['required']) {
+                <div>Category name is required</div>
+                }
+              </div>
+              }
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="modal.dismiss()"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-success">Save Category</button>
+          </div>
+        </form>
+      </ng-template>
     </div>
     <div class="card-body">
       <table class="table">
@@ -16,19 +70,113 @@
           <tr *ngFor="let todoCategory of todoCategories; let i = index">
             <th scope="row">{{ i + 1 }}</th>
             <td>{{ todoCategory.name }}</td>
-            <td>
+            <td class="d-flex gap-2">
               <button
-                class="btn btn-sm btn-warning me-2"
-                (click)="onUpdate(todoCategory)"
+                class="btn btn-sm btn-warning d-flex"
+                placement="top"
+                ngbTooltip="Update"
+                (click)="openModalUpdate(updateTodoCategory, todoCategory)"
               >
-                <i class="bi bi-pencil"></i> Update
+                <mat-icon fontIcon="edit_note"></mat-icon>
               </button>
+              <ng-template #updateTodoCategory let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title">Update Category</h4>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    (click)="modal.dismiss('Cross click')"
+                  ></button>
+                </div>
+
+                <form
+                  [formGroup]="updateForm"
+                  (ngSubmit)="onUpdate()"
+                  autocomplete="off"
+                >
+                  <div class="modal-body">
+                    <!-- Category Name Input -->
+                    <div class="mb-3">
+                      <label for="name" class="form-label">Category Name</label>
+                      <input
+                        type="text"
+                        id="name"
+                        class="form-control"
+                        name="name"
+                        required
+                        placeholder="Enter category name"
+                        formControlName="name"
+                        [ngClass]="{ 'is-invalid': uf['name'].errors }"
+                      />
+                      @if(uf['name'].errors) {
+                      <div class="invalid-feedback" align="left">
+                        @if(uf["name"].errors['required']) {
+                        <div>Category name is required</div>
+                        }
+                      </div>
+                      }
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      (click)="modal.dismiss()"
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" class="btn btn-warning">
+                      Update
+                    </button>
+                  </div>
+                </form>
+              </ng-template>
               <button
-                class="btn btn-sm btn-danger"
-                (click)="onDelete(todoCategory)"
+                class="btn btn-sm btn-danger d-flex"
+                placement="top"
+                ngbTooltip="Delete"
+                (click)="openModalDelete(deleteTodoCategory, todoCategory)"
               >
-                <i class="bi bi-trash"></i> Delete
+                <mat-icon fontIcon="delete_outline"></mat-icon>
               </button>
+              <ng-template #deleteTodoCategory let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title">Delete Category</h4>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    (click)="modal.dismiss('Cross click')"
+                  ></button>
+                </div>
+
+                <div class="modal-body">
+                  <p>
+                    Are you sure you want to delete the todo category "<strong
+                      >{{ selectedTodoCategory?.name }}</strong
+                    >"?
+                  </p>
+                  <p class="text-muted">This action cannot be undone.</p>
+                </div>
+
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="modal.dismiss()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="onDelete()"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </ng-template>
             </td>
           </tr>
         </tbody>
