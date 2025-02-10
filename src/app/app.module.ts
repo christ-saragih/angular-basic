@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +25,7 @@ import { MainLayoutComponent } from './template/main-layout/main-layout.componen
     HttpClientModule,
     NgbModule,
     ReactiveFormsModule,
+    NgApexchartsModule,
   ],
   providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
